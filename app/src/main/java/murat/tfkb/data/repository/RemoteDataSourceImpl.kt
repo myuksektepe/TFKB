@@ -11,7 +11,7 @@ import javax.inject.Inject
 class RemoteDataSourceImpl @Inject constructor(
     private val searchApi: RetrofitApi
 ) : RemoteDataSource {
-    override fun getSearchResults(term: String, limit: Int, entity: String): Flow<MutableList<SearchResultItem>> = flow {
+    override fun getSearchResults(term: String, limit: Int, entity: String): Flow<ResultState<MutableList<SearchResultItem>>> = flow {
         try {
             val results = searchApi.getResults(term, limit, entity)
             ResultState.SUCCESS(results)

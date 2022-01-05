@@ -1,5 +1,6 @@
 package murat.tfkb.presentation.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,6 +12,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import murat.tfkb.domain.model.ResultState
 import murat.tfkb.domain.model.SearchResultItem
+import murat.tfkb.domain.model.SearchResults
 import murat.tfkb.domain.use_case.GetSearchResult
 import javax.inject.Inject
 
@@ -21,8 +23,9 @@ class MainActivityViewModel @Inject constructor(
 
     private var searchJob: Job? = null
 
-    private val _allResults = MutableLiveData<ResultState<List<SearchResultItem>>>()
-    val allResults = _allResults
+    private val _allResults = MutableLiveData<ResultState<MutableList<SearchResultItem>>>()
+    val allResults : LiveData<ResultState<MutableList<SearchResultItem>>>
+        get() = _allResults
 
     fun fetchAllResults(term: String, limit: Int, entity: String) {
         searchJob?.cancel()
@@ -32,15 +35,6 @@ class MainActivityViewModel @Inject constructor(
                 _allResults.postValue(it)
             }
 
-            /*
-            _allResults.postValue(ResultState.LOADING())
-            try {
-                val results = getSearchResult(term, limit, entity)
-                _allResults.postValue(results)
-            } catch (e: Exception) {
-                _allResults.postValue(ResultState.ERROR(e))
-            }
-             */
         }
     }
 }

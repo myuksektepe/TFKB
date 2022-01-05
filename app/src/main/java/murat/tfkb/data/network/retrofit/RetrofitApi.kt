@@ -5,8 +5,8 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface RetrofitApi {
-    @GET("search?term={term}&limit={limit}&entity={entity}")
-    fun getResults(
+    @GET("search")
+    suspend fun getResults(
         @Query("term") term: String,
         @Query("limit") limit: Int,
         @Query("entity") entity: String,
