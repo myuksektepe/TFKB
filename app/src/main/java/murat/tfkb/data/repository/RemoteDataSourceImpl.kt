@@ -13,10 +13,10 @@ class RemoteDataSourceImpl @Inject constructor(
 ) : RemoteDataSource {
     override fun getSearchResults(term: String, limit: Int, entity: String): Flow<ResultState<MutableList<SearchResultItem>>> = flow {
         try {
-            val results = searchApi.getResults(term, limit, entity)
-            ResultState.SUCCESS(results)
+            val r = searchApi.getResults(term, limit, entity)
+            emit(ResultState.SUCCESS(r.results))
         } catch (e: Exception) {
-            ResultState.ERROR(e)
+            emit(ResultState.ERROR(e))
         }
     }
 }

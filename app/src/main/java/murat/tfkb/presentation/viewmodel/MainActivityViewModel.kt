@@ -6,10 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import murat.tfkb.domain.model.ResultState
-import murat.tfkb.domain.model.SearchResultItem
 import murat.tfkb.domain.use_case.GetSearchResult
 import javax.inject.Inject
 
@@ -20,19 +20,25 @@ class MainActivityViewModel @Inject constructor(
 
     private var searchJob: Job? = null
 
-    private val _allResults = MutableLiveData<ResultState<MutableList<SearchResultItem>>>()
-    val allResults: LiveData<ResultState<MutableList<SearchResultItem>>>
+    private val _allResults = MutableLiveData<ResultState<Any>>()
+    val allResults: LiveData<ResultState<Any>>
         get() = _allResults
 
-    fun fetchAllResults(term: String, limit: Int, entity: String) {
-        //searchJob?.cancel()
-        //searchJob =
+    fun trys() {
         viewModelScope.launch {
-
-            getSearchResult(term, limit, entity).collectLatest {
-                _allResults.value = it
-            }
-
+            _allResults.value = ResultState.LOADING()
+            delay(1700)
+            _allResults.postValue(ResultState.SUCCESS("dfdf"))
         }
     }
+
+    fun fetchAllResults(term: String, limit: Int, entity: String) {
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch {
+            getSearchResult(term, limit, entity).collectLatest {
+                _allResults.postValue(it)
+            }
+        }
+    }
+
 }
