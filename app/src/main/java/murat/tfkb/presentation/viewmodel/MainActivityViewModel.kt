@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import murat.tfkb.domain.model.ResultState
@@ -24,18 +25,10 @@ class MainActivityViewModel @Inject constructor(
     val allResults: LiveData<ResultState<Any>>
         get() = _allResults
 
-    fun trys() {
-        viewModelScope.launch {
-            _allResults.value = ResultState.LOADING()
-            delay(1700)
-            _allResults.postValue(ResultState.SUCCESS("dfdf"))
-        }
-    }
-
     fun fetchAllResults(term: String, limit: Int, entity: String) {
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
-            getSearchResult(term, limit, entity).collectLatest {
+            getSearchResult(term, limit, entity).collect {
                 _allResults.postValue(it)
             }
         }

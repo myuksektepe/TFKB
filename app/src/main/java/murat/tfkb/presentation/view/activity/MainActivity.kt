@@ -11,6 +11,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import murat.tfkb.R
+import murat.tfkb.ViewExtensions.hideDialog
+import murat.tfkb.ViewExtensions.showAlert
+import murat.tfkb.ViewExtensions.showLoading
 import murat.tfkb.databinding.ActivityMainBinding
 import murat.tfkb.domain.model.ResultState
 import murat.tfkb.domain.model.SearchResultItem
@@ -35,14 +38,13 @@ class MainActivity : AppCompatActivity() {
             lifecycleScope.launch(Dispatchers.Main) {
                 when (it) {
                     is ResultState.LOADING -> {
-                        binding.txtMain.text = "Yükleniyooor.."
+                        this@MainActivity.showLoading()
                     }
                     is ResultState.ERROR -> {
-                        binding.txtMain.text = "Hata: ${it.exception.message}"
+                        this@MainActivity.showAlert(it.exception.message.toString())
                     }
                     is ResultState.SUCCESS -> {
-                        //binding.txtMain.text = "${it.data}"
-
+                        hideDialog()
                         val list = it.data as List<SearchResultItem>
                         if (list.isNotEmpty()) {
                             itemAdapter.update(list)
@@ -58,6 +60,6 @@ class MainActivity : AppCompatActivity() {
         })
 
         //viewModel.trys()
-        viewModel.fetchAllResults("Ray Charles", 30, "")
+        viewModel.fetchAllResults("Dance", 100, "")
     }
 }
