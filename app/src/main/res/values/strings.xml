@@ -15,4 +15,5 @@
     <string name="completed">Tamamlandı</string>
     <string name="try_again">Tekrar Dene</string>
     <string name="loading">Yükleniyor…</string>
+    <string name="quick_search">Hızlı arama…</string>
 </resources>

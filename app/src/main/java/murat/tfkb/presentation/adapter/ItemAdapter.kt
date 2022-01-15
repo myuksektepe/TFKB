@@ -43,6 +43,7 @@ class ItemAdapter(
     inner class ViewHolder(
         private val binding: ListItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
+        @SuppressLint("SetTextI18n")
         fun bind(
             searchResultItem: SearchResultItem,
             position: Int,

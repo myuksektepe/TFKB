@@ -83,6 +83,9 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:$glide_version"
     kapt "com.github.bumptech.glide:compiler:$glide_version"
 
+    def rxbinding_version = "0.4.0"
+    implementation "com.jakewharton.rxbinding:rxbinding:$rxbinding_version"
+
     // Test
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

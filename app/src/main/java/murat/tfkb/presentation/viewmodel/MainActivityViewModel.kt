@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
@@ -12,12 +13,13 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import murat.tfkb.domain.model.ResultState
 import murat.tfkb.domain.use_case.GetSearchResult
+import murat.tfkb.presentation.base.BaseViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
     private val getSearchResult: GetSearchResult
-) : ViewModel() {
+) : BaseViewModel() {
 
     private var searchJob: Job? = null
 
@@ -27,7 +29,7 @@ class MainActivityViewModel @Inject constructor(
 
     fun fetchAllResults(term: String, limit: Int, entity: String) {
         searchJob?.cancel()
-        searchJob = viewModelScope.launch {
+        searchJob = viewModelScope.launch(Dispatchers.IO) {
             getSearchResult(term, limit, entity).collect {
                 _allResults.postValue(it)
             }
