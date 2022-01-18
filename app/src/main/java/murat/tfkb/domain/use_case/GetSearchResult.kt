@@ -6,7 +6,9 @@ import murat.tfkb.domain.model.ResultState
 import murat.tfkb.domain.model.SearchResultItem
 import javax.inject.Inject
 
-class GetSearchResult @Inject constructor(private val remoteDataSource: RemoteDataSource) {
+class GetSearchResult @Inject constructor(
+    private val remoteDataSource: RemoteDataSource
+) {
     operator fun invoke(term: String, limit: Int, entity: String):
             Flow<ResultState<MutableList<SearchResultItem>>> =
         remoteDataSource.getSearchResults(term, limit, entity)
